@@ -1,20 +1,23 @@
 import imageWorker.ImageWorker;
-import mailWorker.MailSender;
-import mailWorker.Mailgun;
+import imageWorkerImpl.GoogleCVImageWorker;
+import mailWorkerImpl.JavaEmailSender;
 
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            List<String> tags = ImageWorker.detectLabels();
-            System.out.println(tags);
+            ImageWorker imageWorker = new GoogleCVImageWorker();
+            List<String> tags = imageWorker.detectLabels("src/main/resources/porshe.jpg");
+            if (tags.contains("car")) {
+                JavaEmailSender mailSender = new JavaEmailSender();
+                mailSender.send("car");
+            }
         } catch (Exception ex){
             ex.printStackTrace();
         }
 
-        MailSender mailSender = new MailSender();
-        mailSender.send();
+
 
 
     }
